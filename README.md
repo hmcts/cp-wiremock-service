@@ -1,6 +1,6 @@
 # Wiremock Service
 
-[![Build Status](https://travis-ci.org/CJSCommonPlatform/wiremock-service.svg?branch=master)](https://travis-ci.org/CJSCommonPlatform/wiremock-service)
+[![Coverage Status](https://coveralls.io/repos/github/hmcts/cp-wiremock-service/badge.svg?branch=main)](https://coveralls.io/github/hmcts/cp-wiremock-service?branch=main)
 
 This project packages [WireMock](http://wiremock.org/) as a .war file, so it can be deployed to a container as a standalone service.
 
