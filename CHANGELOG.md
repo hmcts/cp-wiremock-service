@@ -3,6 +3,12 @@ All notable changes to this project will be documented in this file, which follo
 on [Keep a CHANGELOG](http://keepachangelog.com/). This project adheres to
 [Semantic Versioning](http://semver.org/).
 
+
+## [17.0.2] - 2025-06-03
+### Updated
+- Revert Wiremock to 2.x and junit 4 (as wiremock 3.x is not compatible with wildfly 26 and expecting application server to be compatible with jakarta EE 9)
+- This release is functionality same as 17.0.0
+
 ## [17.0.1] - 2023-07-12
 ### Updated
 - Update Wiremock to 3.0.0-beta-10
