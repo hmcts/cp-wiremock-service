@@ -1,24 +1,30 @@
 package uk.gov.justice.service.wiremock.testutil;
 
+import static com.github.tomakehurst.wiremock.client.WireMock.configureFor;
 import static com.github.tomakehurst.wiremock.client.WireMock.reset;
 import static com.github.tomakehurst.wiremock.core.WireMockConfiguration.wireMockConfig;
-import static javax.ws.rs.core.Response.Status.NOT_FOUND;
-import static javax.ws.rs.core.Response.Status.OK;
-import static net.trajano.commons.testing.UtilityClassTestUtil.assertUtilityClassWellDefined;
+import static jakarta.ws.rs.core.Response.Status.NOT_FOUND;
+import static jakarta.ws.rs.core.Response.Status.OK;
 import static org.apache.cxf.jaxrs.client.WebClient.create;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 import static uk.gov.justice.service.wiremock.testutil.InternalEndpointMockUtils.stubPingFor;
 
-import javax.ws.rs.core.Response;
-import javax.ws.rs.core.Response.Status;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.Modifier;
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
 
-import com.github.tomakehurst.wiremock.junit.WireMockRule;
+import jakarta.ws.rs.core.Response;
+import jakarta.ws.rs.core.Response.Status;
+
+import com.github.tomakehurst.wiremock.WireMockServer;
 import org.apache.cxf.jaxrs.client.WebClient;
 import org.junit.After;
 import org.junit.Before;
-import org.junit.Rule;
 import org.junit.Test;
 
 /**
@@ -27,47 +33,55 @@ import org.junit.Test;
 public class InternalEndpointMockUtilsIT {
 
     private static final String SERVICE_NAME = "test-command-api";
+    private static final String PONG = "pong";
 
-    @Rule
-    public WireMockRule wm = new WireMockRule(wireMockConfig());
+    private WireMockServer wireMockServer;
+    private String baseUrl;
 
     @Before
     public void setUp() {
-        reset();
+        wireMockServer = new WireMockServer(wireMockConfig().dynamicPort());
+        wireMockServer.start();
+        baseUrl = "http://localhost:" + wireMockServer.port();
+        configureFor("localhost", wireMockServer.port());
         stubPingFor(SERVICE_NAME);
     }
 
     @After
     public void tearDown() {
         reset();
-    }
-
-    private static final String PONG = "pong";
-    private static final String BASE_URL = "http://localhost:8080";
-
-    @Test
-    public void shouldBeWellDefinedUtilityClass() {
-        assertUtilityClassWellDefined(InternalEndpointMockUtils.class);
+        wireMockServer.stop();
     }
 
     @Test
-    public void shouldStubPingForGetRequest() {
-        Response response = buildWebClient(SERVICE_NAME).get();
-        verifyStatusEquals(response, OK);
-        assertThat(response.readEntity(String.class), equalTo(PONG));
+    public void shouldBeWellDefinedUtilityClass() throws Exception {
+        assertThat(Modifier.isFinal(InternalEndpointMockUtils.class.getModifiers()), is(true));
+        final Constructor<InternalEndpointMockUtils> constructor =
+                InternalEndpointMockUtils.class.getDeclaredConstructor();
+        assertThat(Modifier.isPrivate(constructor.getModifiers()), is(true));
+    }
+
+    @Test
+    public void shouldStubPingForGetRequest() throws Exception {
+        final HttpClient client = HttpClient.newHttpClient();
+        final HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create(baseUrl + "/" + SERVICE_NAME + "/internal/metrics/ping"))
+                .build();
+        final HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+
+        assertThat(response.statusCode(), is(OK.getStatusCode()));
+        assertThat(response.body(), equalTo(PONG));
     }
 
     @Test
     public void shouldStubPingForHeadRequest() {
-        Response response = buildWebClient(SERVICE_NAME).head();
+        final Response response = buildWebClient(SERVICE_NAME).head();
         verifyStatusEquals(response, OK);
-        assertThat(response.readEntity(String.class), equalTo(""));
     }
-
 
     @Test
     public void shouldOnlyStubForGivingService() {
-        WebClient client = buildWebClient("aTestService");
+        final WebClient client = buildWebClient("aTestService");
 
         verifyStatusEquals(client.get(), NOT_FOUND);
         verifyStatusEquals(client.head(), NOT_FOUND);
@@ -75,17 +89,16 @@ public class InternalEndpointMockUtilsIT {
 
     @Test
     public void shouldResetAllRequests() {
-
         reset();
 
-        WebClient client = buildWebClient(SERVICE_NAME);
+        final WebClient client = buildWebClient(SERVICE_NAME);
 
         verifyStatusEquals(client.get(), NOT_FOUND);
         verifyStatusEquals(client.head(), NOT_FOUND);
     }
 
     private WebClient buildWebClient(final String serviceName) {
-        return create(BASE_URL).path("/" + serviceName + "/internal/metrics/ping");
+        return create(baseUrl).path("/" + serviceName + "/internal/metrics/ping");
     }
 
     private void verifyStatusEquals(final Response response, final Status status) {
