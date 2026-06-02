@@ -6,20 +6,22 @@ import static com.github.tomakehurst.wiremock.client.WireMock.get;
 import static com.github.tomakehurst.wiremock.client.WireMock.reset;
 import static com.github.tomakehurst.wiremock.client.WireMock.stubFor;
 import static com.github.tomakehurst.wiremock.client.WireMock.urlEqualTo;
-import static javax.ws.rs.client.ClientBuilder.newBuilder;
-import static javax.ws.rs.core.Response.Status.NOT_FOUND;
-import static javax.ws.rs.core.Response.Status.OK;
+import static jakarta.ws.rs.core.Response.Status.NOT_FOUND;
+import static jakarta.ws.rs.core.Response.Status.OK;
 import static org.apache.cxf.jaxrs.client.WebClient.create;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 
-import javax.ws.rs.client.Client;
-import javax.ws.rs.client.WebTarget;
-import javax.ws.rs.core.Response;
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
+
+import jakarta.ws.rs.core.Response;
 
 import org.hamcrest.CoreMatchers;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 /**
  * An example test war to show how to intereact with Jee deployed WireMock server war
@@ -32,7 +34,7 @@ public class WireMockServiceIT {
     private static final String APPLICATION_JSON = "application/json";
     private static final String CONTENT_TYPE = "Content-Type";
 
-    @Before
+    @BeforeEach
     public void setup() {
 
         configure();
@@ -45,14 +47,15 @@ public class WireMockServiceIT {
     }
 
     @Test
-    public void shouldStubWebService() {
-        Client client = newBuilder().build();
-        WebTarget target = client.target(BASE_URL + PATH);
+    public void shouldStubWebService() throws Exception {
+        final HttpClient client = HttpClient.newHttpClient();
+        final HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create(BASE_URL + PATH))
+                .build();
+        final HttpResponse<String> httpResponse = client.send(request, HttpResponse.BodyHandlers.ofString());
 
-        Response response = target.request().get();
-
-        assertThat(response.getStatus(), is(OK.getStatusCode()));
-        assertThat(response.readEntity(String.class), CoreMatchers.equalTo(RESPONSE));
+        assertThat(httpResponse.statusCode(), is(OK.getStatusCode()));
+        assertThat(httpResponse.body(), CoreMatchers.equalTo(RESPONSE));
     }
 
     @Test
