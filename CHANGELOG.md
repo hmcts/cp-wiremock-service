@@ -4,7 +4,7 @@ on [Keep a CHANGELOG](http://keepachangelog.com/). This project adheres to
 [Semantic Versioning](http://semver.org/).
 
 
-## [21.0.0] - 2026-03-31
+## [21.0.0-M1] - 2026-06-02
 ### Updated
 - Update to Java 21 and Jakarta EE 10
 - Update WireMock to 3.10.0 (`org.wiremock:wiremock`) — groupId changed from `com.github.tomakehurst` to `org.wiremock` in WireMock 3.x
