@@ -5,7 +5,7 @@
     <parent>
         <groupId>uk.gov.justice.services</groupId>
         <artifactId>wiremock-service-parent</artifactId>
-        <version>17.0.3-SNAPSHOT</version>
+        <version>21.0.0-M1-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
@@ -23,13 +23,13 @@
             <type>war</type>
         </dependency>
         <dependency>
-            <groupId>com.github.tomakehurst</groupId>
+            <groupId>org.wiremock</groupId>
             <artifactId>wiremock</artifactId>
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>javax.servlet</groupId>
-            <artifactId>javax.servlet-api</artifactId>
+            <groupId>jakarta.servlet</groupId>
+            <artifactId>jakarta.servlet-api</artifactId>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -38,8 +38,8 @@
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-api</artifactId>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -128,6 +128,7 @@
                 <version>${wildfly-maven-plugin.version}</version>
                 <configuration>
                     <jbossHome>${jboss.home}</jbossHome>
+                    <port>19990</port>
                 </configuration>
                 <executions>
                     <execution>
@@ -138,6 +139,7 @@
                         </goals>
                         <configuration>
                             <startupTimeout>120</startupTimeout>
+                            <javaOpts>-Djboss.management.http.port=19990</javaOpts>
                         </configuration>
                     </execution>
                     <execution>

@@ -4,6 +4,21 @@ on [Keep a CHANGELOG](http://keepachangelog.com/). This project adheres to
 [Semantic Versioning](http://semver.org/).
 
 
+## [21.0.0-M1] - 2026-06-02
+### Updated
+- Update to Java 21 and Jakarta EE 10
+- Update WireMock to 3.10.0 (`org.wiremock:wiremock`) — groupId changed from `com.github.tomakehurst` to `org.wiremock` in WireMock 3.x
+- Update WildFly to 34.0.1.Final
+- Update `maven-parent-pom` to 21.0.0-SNAPSHOT
+- Update `maven-common-bom` to 21.0.0-SNAPSHOT
+- Replace `javax:javaee-api` with `jakarta.platform:jakarta.jakartaee-api`
+- Replace `javax.servlet:javax.servlet-api` with `jakarta.servlet:jakarta.servlet-api`
+- Migrate `javax.ws.rs.*` imports to `jakarta.ws.rs.*` across all Java source files
+- Update `web.xml` from J2EE Servlet 2.4 to Jakarta EE Servlet 6.0 namespace
+- Update `jboss-deployment-structure.xml` for WildFly 34: remove `resteasy` subsystem exclusion (merged into `jaxrs`), replace `javax.ws.rs.api` with `jakarta.ws.rs.api`, remove stale WildFly 26 module exclusions
+- Remove explicit `httpclient` 4.x dependency — superseded by WireMock 3.x's bundled Apache HttpComponents 5.x
+- Add explicit version for `net.trajano.commons:commons-testing` (2.0.1) — no longer managed by the BOM
+
 ## [17.0.2] - 2025-06-03
 ### Updated
 - Revert Wiremock to 2.x and junit 4 (as wiremock 3.x is not compatible with wildfly 26 and expecting application server to be compatible with jakarta EE 9)

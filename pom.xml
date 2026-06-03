@@ -7,12 +7,12 @@
     <parent>
         <groupId>uk.gov.justice</groupId>
         <artifactId>maven-parent-pom</artifactId>
-        <version>17.0.0</version>
+        <version>21.0.0-M2</version>
     </parent>
 
     <groupId>uk.gov.justice.services</groupId>
     <artifactId>wiremock-service-parent</artifactId>
-    <version>17.0.3-SNAPSHOT</version>
+    <version>21.0.0-M1-SNAPSHOT</version>
     <packaging>pom</packaging>
 
     <modules>
@@ -28,11 +28,15 @@
         <cpp.repo.name>wiremock-service</cpp.repo.name>
         <jboss.home>${project.build.directory}/${wildfly.version}</jboss.home>
 
-        <maven-common-bom.version>17.0.0</maven-common-bom.version>
-        <wildfly.version>wildfly-26.1.2.Final</wildfly.version>
+        <maven-common-bom.version>21.0.0-M2</maven-common-bom.version>
+        <wildfly.version>wildfly-34.0.1.Final</wildfly.version>
+        <!--
+            coveralls-maven-plugin:4.3.0 ships with jakarta.xml.bind-api:2.3.1 which is
+            unavailable in the CI repo. Pin to 2.3.2 via plugin <dependencies> override.
+            Same version used by the RAML parser — see cp-framework-libraries root pom.
+        -->
+        <jakarta.xml.bind-api.raml.version>2.3.2</jakarta.xml.bind-api.raml.version>
         <wildfly-maven-plugin.version>4.0.0.Final</wildfly-maven-plugin.version>
-        <wiremock.version>2.27.2</wiremock.version>
-        <httpclient.version>4.5.13</httpclient.version>
     </properties>
 
     <scm>
@@ -50,16 +54,6 @@
                 <scope>import</scope>
                 <type>pom</type>
             </dependency>
-            <dependency>
-                <groupId>com.github.tomakehurst</groupId>
-                <artifactId>wiremock</artifactId>
-                <version>${wiremock.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.httpcomponents</groupId>
-                <artifactId>httpclient</artifactId>
-                <version>${httpclient.version}</version>
-            </dependency>
         </dependencies>
     </dependencyManagement>
 
@@ -68,6 +62,14 @@
             <plugin>
                 <groupId>org.eluder.coveralls</groupId>
                 <artifactId>coveralls-maven-plugin</artifactId>
+                <dependencies>
+                    <!-- coveralls-maven-plugin 4.3.0 ships with jakarta.xml.bind-api:2.3.1 which is unavailable in the CI repo. Pin to 2.3.2. -->
+                    <dependency>
+                        <groupId>jakarta.xml.bind</groupId>
+                        <artifactId>jakarta.xml.bind-api</artifactId>
+                        <version>${jakarta.xml.bind-api.raml.version}</version>
+                    </dependency>
+                </dependencies>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
