@@ -7,7 +7,7 @@
     <parent>
         <groupId>uk.gov.justice</groupId>
         <artifactId>maven-parent-pom</artifactId>
-        <version>21.0.0-M1-SNAPSHOT</version>
+        <version>21.0.0-M2</version>
     </parent>
 
     <groupId>uk.gov.justice.services</groupId>
@@ -28,7 +28,7 @@
         <cpp.repo.name>wiremock-service</cpp.repo.name>
         <jboss.home>${project.build.directory}/${wildfly.version}</jboss.home>
 
-        <maven-common-bom.version>21.0.0-M1-SNAPSHOT</maven-common-bom.version>
+        <maven-common-bom.version>21.0.0-M2</maven-common-bom.version>
         <wildfly.version>wildfly-34.0.1.Final</wildfly.version>
         <wildfly-maven-plugin.version>4.0.0.Final</wildfly-maven-plugin.version>
     </properties>
