@@ -7,12 +7,12 @@
     <parent>
         <groupId>uk.gov.justice</groupId>
         <artifactId>maven-parent-pom</artifactId>
-        <version>21.0.0-M2</version>
+        <version>25.104.0-M1</version>
     </parent>
 
     <groupId>uk.gov.justice.services</groupId>
     <artifactId>wiremock-service-parent</artifactId>
-    <version>21.0.0-M1-SNAPSHOT</version>
+    <version>25.104.0-M1-SNAPSHOT</version>
     <packaging>pom</packaging>
 
     <modules>
@@ -28,15 +28,16 @@
         <cpp.repo.name>wiremock-service</cpp.repo.name>
         <jboss.home>${project.build.directory}/${wildfly.version}</jboss.home>
 
-        <maven-common-bom.version>21.0.0-M2</maven-common-bom.version>
-        <wildfly.version>wildfly-34.0.1.Final</wildfly.version>
+        <maven-common-bom.version>25.104.0-M1</maven-common-bom.version>
+        <wildfly.version>wildfly-40.0.0.Final</wildfly.version>
+        <wildfly.full.version>40.0.0.Final</wildfly.full.version>
         <!--
             coveralls-maven-plugin:4.3.0 ships with jakarta.xml.bind-api:2.3.1 which is
             unavailable in the CI repo. Pin to 2.3.2 via plugin <dependencies> override.
             Same version used by the RAML parser — see cp-framework-libraries root pom.
         -->
         <jakarta.xml.bind-api.raml.version>2.3.2</jakarta.xml.bind-api.raml.version>
-        <wildfly-maven-plugin.version>4.0.0.Final</wildfly-maven-plugin.version>
+        <wildfly-maven-plugin.version>6.0.0.Final</wildfly-maven-plugin.version>
     </properties>
 
     <scm>

@@ -5,7 +5,7 @@
     <parent>
         <groupId>uk.gov.justice.services</groupId>
         <artifactId>wiremock-service-parent</artifactId>
-        <version>21.0.0-M1-SNAPSHOT</version>
+        <version>25.104.0-M1-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
@@ -131,6 +131,21 @@
                     <port>19990</port>
                 </configuration>
                 <executions>
+                    <execution>
+                        <id>provision-server</id>
+                        <phase>generate-test-resources</phase>
+                        <goals>
+                            <goal>provision</goal>
+                        </goals>
+                        <configuration>
+                            <provisioningDir>${jboss.home}</provisioningDir>
+                            <featurePacks>
+                                <featurePack>
+                                    <location>wildfly@maven(org.jboss.universe:community-universe)#${wildfly.full.version}</location>
+                                </featurePack>
+                            </featurePacks>
+                        </configuration>
+                    </execution>
                     <execution>
                         <id>start-server</id>
                         <phase>pre-integration-test</phase>
