@@ -115,7 +115,7 @@
                             <resources>
                                 <resource>
                                     <directory>src/test/resources/wildfly-config</directory>
-                                    <filtering>true</filtering>
+                                    <filtering>false</filtering>
                                 </resource>
                             </resources>
                         </configuration>
@@ -131,21 +131,6 @@
                     <port>19990</port>
                 </configuration>
                 <executions>
-                    <execution>
-                        <id>provision-server</id>
-                        <phase>generate-test-resources</phase>
-                        <goals>
-                            <goal>provision</goal>
-                        </goals>
-                        <configuration>
-                            <provisioningDir>${jboss.home}</provisioningDir>
-                            <featurePacks>
-                                <featurePack>
-                                    <location>wildfly@maven(org.jboss.universe:community-universe)#${wildfly.full.version}</location>
-                                </featurePack>
-                            </featurePacks>
-                        </configuration>
-                    </execution>
                     <execution>
                         <id>start-server</id>
                         <phase>pre-integration-test</phase>
@@ -166,7 +151,7 @@
                     </execution>
                     <execution>
                         <id>stop-server</id>
-                        <phase>install</phase>
+                        <phase>post-integration-test</phase>
                         <goals>
                             <goal>shutdown</goal>
                         </goals>
