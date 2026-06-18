@@ -2,7 +2,12 @@
 All notable changes to this project will be documented in this file, which follows the guidelines
 on [Keep a CHANGELOG](http://keepachangelog.com/). This project adheres to
 [Semantic Versioning](http://semver.org/).
+       
 
+## [25.104.0-M4] - 2026-06-18
+### Updated
+- Update `maven-parent-pom` to 25.104.0-M6
+- Update `maven-common-bom` to 25.104.0-M5
 
 ## [21.0.0-M1] - 2026-06-02
 ### Updated
