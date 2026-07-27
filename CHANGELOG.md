@@ -4,6 +4,11 @@ on [Keep a CHANGELOG](http://keepachangelog.com/). This project adheres to
 [Semantic Versioning](http://semver.org/).
        
 
+## [25.104.0-M5] - 2026-07-27
+### Updated
+- Update `maven-parent-pom` to 25.104.0-M7 (buildnumber-plugin warning fix)
+- Update `maven-common-bom` to 25.104.0-M6 — picks up Jackson `2.21.5` (**CVE-2026-54515**) and the `org.junit:junit-bom` import
+
 ## [25.104.0-M4] - 2026-06-18
 ### Updated
 - Update `maven-parent-pom` to 25.104.0-M6
