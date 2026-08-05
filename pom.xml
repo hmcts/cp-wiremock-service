@@ -28,7 +28,7 @@
         <cpp.repo.name>wiremock-service</cpp.repo.name>
         <jboss.home>${project.build.directory}/${wildfly.version}</jboss.home>
 
-        <maven-common-bom.version>25.104.0-M6</maven-common-bom.version>
+        <maven-common-bom.version>25.104.0-M7</maven-common-bom.version>
         <wildfly.version>wildfly-40.0.0.Final</wildfly.version>
         <wildfly.full.version>40.0.0.Final</wildfly.full.version>
         <!--

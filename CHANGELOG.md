@@ -4,6 +4,10 @@ on [Keep a CHANGELOG](http://keepachangelog.com/). This project adheres to
 [Semantic Versioning](http://semver.org/).
        
 
+## [25.104.0-M6] - 2026-08-05
+### Updated
+- Bumped `maven-common-bom.version` to `25.104.0-M7` — picks up the Apache Artemis client bump `2.53.0` → `2.54.0`.
+
 ## [25.104.0-M5] - 2026-07-27
 ### Updated
 - Update `maven-parent-pom` to 25.104.0-M7 (buildnumber-plugin warning fix)
