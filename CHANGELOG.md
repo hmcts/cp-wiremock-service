@@ -4,19 +4,30 @@ on [Keep a CHANGELOG](http://keepachangelog.com/). This project adheres to
 [Semantic Versioning](http://semver.org/).
        
 
-## [25.104.0-M6] - 2026-08-05
-### Updated
-- Bumped `maven-common-bom.version` to `25.104.0-M7` — picks up the Apache Artemis client bump `2.53.0` → `2.54.0`.
+## [Unreleased]
 
-## [25.104.0-M5] - 2026-07-27
-### Updated
-- Update `maven-parent-pom` to 25.104.0-M7 (buildnumber-plugin warning fix)
-- Update `maven-common-bom` to 25.104.0-M6 — picks up Jackson `2.21.5` (**CVE-2026-54515**) and the `org.junit:junit-bom` import
+## [25.104.0] - 2026-09-07
+First official (non-milestone) release of the Java 25 / WildFly 40 / Jakarta EE 11 line,
+consolidating milestones `25.104.0-M1` to `25.104.0-M6`.
 
-## [25.104.0-M4] - 2026-06-18
 ### Updated
-- Update `maven-parent-pom` to 25.104.0-M6
-- Update `maven-common-bom` to 25.104.0-M5
+- Update to Java 25 / WildFly 40 / Jakarta EE 11 (25.104.x release line)
+- Update WildFly from `34.0.1.Final` to `40.0.0.Final`, and `wildfly-maven-plugin` from `4.0.0.Final` to `6.0.0.Final`
+- Update `maven-parent-pom` and `maven-common-bom` to the released `25.104.0` — Java 25 / Jakarta EE 11 targeting (`java.major.version=25`, `enforcer.java.version.range=[25,)`), Jakarta EE 11 API set, Weld 6, RESTEasy 7, Apache Artemis `2.54.0` under the new `org.apache.artemis` groupId, Jackson `2.21.5` (**CVE-2026-54515**) and the `org.junit:junit-bom` import
+- Replace Galleon provisioning with an unpack of the WildFly zip — provisioning was failing on version constraints under the WildFly 40 community universe
+- `ejb-jar.xml`: update namespace from `javaee` to `jakartaee` (EJB 4.0)
+- `web.xml`: add `load-on-startup` to both WireMock servlets for eager initialisation, and remove the unused `welcome-file-list`
+- `wildfly-maven-plugin` `copy-jboss-config`: set `filtering=false` so Maven no longer mangles JBoss `${...}` property expressions in `standalone.xml`
+- Move the `stop-server` execution from the `install` phase to `post-integration-test`
+- CI agent demand from `ubuntu-j21` to `ubuntu-j25-postgres`
+
+### Added
+- `wiremock-service-test` `wildfly-config/standalone.xml`: a custom integration-test server configuration for WildFly 40 — no welcome-content handler, with Elytron and Undertow settings matching the WildFly 40 community schema 20.0
+- `beans.xml` with `bean-discovery-mode=none` in `wiremock-service`, to suppress CDI scanning of the Jetty classes bundled inside WireMock
+- Exclusion of `org.eclipse.jetty.toolchain:jetty-jakarta-servlet-api`, which clashes with the container's Jakarta Servlet API
+
+### Fixed
+- WireMock returned **405 for every POST** on WildFly 40. `maven-parent-pom` excludes `web.xml` from all WARs because CPP services use annotation-based configuration, but WireMock registers its mock and admin handler servlets exclusively through `web.xml` — so neither was registered and Undertow's `DefaultServlet` answered instead. `maven-war-plugin` is now overridden in `wiremock-service` to retain `web.xml` in the WAR while keeping the RESTEasy exclusion
 
 ## [21.0.0-M1] - 2026-06-02
 ### Updated
